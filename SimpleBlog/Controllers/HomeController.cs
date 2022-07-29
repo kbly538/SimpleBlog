@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleBlog.Data;
+using SimpleBlog.Data.FileManager;
 using SimpleBlog.Data.Repository;
 using SimpleBlog.Models;
 using System.Collections.Generic;
@@ -11,9 +12,11 @@ namespace SimpleBlog.ControllerS
 	public class HomeController : Controller
 	{
 		private IRepository _repository;
-		public HomeController(IRepository repository)
+		private IFileManager _fileManager;
+		public HomeController(IRepository repository, IFileManager fileManager)
 		{
 			_repository = repository;
+			_fileManager = fileManager;
 		}
 		public IActionResult Index()
 		{
@@ -27,6 +30,13 @@ namespace SimpleBlog.ControllerS
 
 			Post post = _repository.GetPost(id);
 			return View(post);
+		}
+
+		[HttpGet("/Image/{image}")]
+		public IActionResult Image(string image)
+		{
+			var mime = image.Substring(image.LastIndexOf(".") + 1);
+			return new FileStreamResult(_fileManager.ImageStream(image), $"image/{mime}");
 		}
 
 		

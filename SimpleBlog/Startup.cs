@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SimpleBlog.Data;
+using SimpleBlog.Data.FileManager;
 using SimpleBlog.Data.Repository;
 
 
@@ -48,6 +49,7 @@ namespace SimpleBlog
 			});
 			services.AddMvc(option => option.EnableEndpointRouting = false);
 			services.AddTransient<IRepository, Repository>();			
+			services.AddTransient<IFileManager, FileManager>();			
 
 
 		}

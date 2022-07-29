@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SimpleBlog.Data.FileManager;
 using SimpleBlog.Data.Repository;
 using SimpleBlog.Models;
+using SimpleBlog.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +16,11 @@ namespace SimpleBlog.Controllers
 	public class PanelController : Controller
 	{ 
 		private IRepository _repository;
-		public PanelController(IRepository repository)
+		private IFileManager _fileManager;
+		public PanelController(IRepository repository, IFileManager fileManager)
 		{
 			_repository = repository;
+			_fileManager = fileManager;
 		}
 		public IActionResult Index()
 		{
@@ -37,16 +41,30 @@ namespace SimpleBlog.Controllers
 		{
 			if (id == null)
 			{
-				return View(new Post());
+				return View(new PostViewModel());
 			}
 
 			var post = _repository.GetPost((int)id);
-			return View(post);
+			return View(new PostViewModel
+			{
+				Id = post.Id,
+				Title = post.Title,
+				Content = post.Content,
+			}); 
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Edit(Post post)
+		public async Task<IActionResult> Edit(PostViewModel postVM)
 		{
+
+			var post = new Post
+			{
+
+				Id = postVM.Id,
+				Content = postVM.Content,
+				Title = postVM.Title,
+				Image = await _fileManager.SaveImage(postVM.Image)
+			};
 
 			if (post.Id > 0)
 			{
