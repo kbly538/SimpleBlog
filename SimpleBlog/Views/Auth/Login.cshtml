@@ -1,0 +1,17 @@
+﻿@model LoginViewModel
+@{ 
+
+}
+
+<form asp-controller="Auth" asp-action="login" method="post">
+    <div>
+        <label>Username: </label>
+        <input asp-for="UserName" />
+        <label>Password: </label>
+        <input asp-for="Password" />
+        <input type="submit" value="Submit" />
+
+    </div>
+
+
+</form>
