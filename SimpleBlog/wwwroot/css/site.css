@@ -1,0 +1,90 @@
+﻿body {
+    margin: 0;
+    background-color: #4f5a62;
+}
+
+a {
+    color: aliceblue;
+    text-decoration: none;
+
+}
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+nav {
+    background-color: #20272a;
+    height: 50px;
+    width: 100%;
+    text-align: center;
+
+}
+
+    nav a {
+        display: inline-block;
+        height: 100px;
+        padding: 15px;
+    }
+
+.main-img {
+    position: relative;
+    height: 300px;
+    background-image: url('../content/static/barley-field-1684052_1920.jpg');
+    background-position: center;
+    background-size: cover;
+    
+}
+
+.title {
+    position: absolute;
+    color: white;
+    font-size: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 35%;
+    background-color: black;
+    padding: 30px;
+    border: 5px solid white;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+
+}
+
+.post {
+    margin: 10px;
+    position: relative;
+    height: 400px;
+    display: flex;
+    box-shadow: 0 0 5px 0 black;    
+}
+
+    .post img {
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .post-content {
+        margin: -5px 5px 0;
+        background-color: white;
+
+
+    }
+
+    .no-shadow {
+        box-shadow: none;
+    }
+
+.title-post {
+    position: absolute;
+    color: white;
+    font-size: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 40%;
+    text-shadow: 1px 1px 2px black;
+}

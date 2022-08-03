@@ -8,5 +8,6 @@ namespace SimpleBlog.ViewModels
 		public string Title { get; set; }
 		public string Content { get; set; }
 		public IFormFile Image { get; set; } = null;
+		public string ImageName { get; set; } = "";
 	}
 }

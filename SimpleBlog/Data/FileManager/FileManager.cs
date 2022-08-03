@@ -11,14 +11,12 @@ namespace SimpleBlog.Data.FileManager
 {
 	public class FileManager : IFileManager
 	{
-		private IConfiguration _config;
 		private string _imagePath;
 		public FileManager(IConfiguration config)
 		{
 			_imagePath = config["Path:Images"];
-			_config = config;
 		}
-
+		
 		public FileStream ImageStream(string image)
 		{
 			try
@@ -55,7 +53,7 @@ namespace SimpleBlog.Data.FileManager
 			} catch (Exception e)
 			{
 				Console.Write(e.Message);
-				return "Error loading the images.";
+				return "Error loading the image.";
 			}
 		}
 	}

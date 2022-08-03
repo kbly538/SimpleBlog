@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleBlog.Data;
 using SimpleBlog.Data.FileManager;
 using SimpleBlog.Data.Repository;
 using SimpleBlog.Models;
+using SimpleBlog.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
