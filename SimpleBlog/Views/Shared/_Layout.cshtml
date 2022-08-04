@@ -3,7 +3,10 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="Personal Blog" />
+	<meta name="keywords" content="@ViewBag.Keywords" />
 	<title>@ViewData["Title"] - SimpleBlog</title>
+
 	<link href="~/css/site.css" rel="stylesheet" />
 </head>
 <body>
@@ -11,6 +14,9 @@
 	<div>
 		<nav>
 			<a asp-controller="Home" asp-action="Index">Home</a>
+			<a asp-controller="Home" asp-action="Index" asp-route-category="Programming">Programming</a>
+			<a asp-controller="Home" asp-action="Index" asp-route-category="Computers">Computers</a>
+			<a asp-controller="Home" asp-action="Index" asp-route-category="Ideas">Ideas</a>
 			<a asp-controller="Panel" asp-action="Index">Admin Panel</a>
 
 			@if (User.Identity.IsAuthenticated)
@@ -30,6 +36,6 @@
 	<div >
 		@RenderBody()
 	</div>
-
+	@RenderSection("scripts", false)
 </body>
 </html>

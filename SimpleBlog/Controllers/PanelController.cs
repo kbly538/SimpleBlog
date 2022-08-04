@@ -50,6 +50,11 @@ namespace SimpleBlog.Controllers
 				Id = post.Id,
 				Title = post.Title,
 				Content = post.Content,
+				CurrentImage = post.Image,
+				Description = post.Description,
+				Category = post.Category,
+				Tags = post.Tags
+				
 			}); 
 		}
 
@@ -63,8 +68,19 @@ namespace SimpleBlog.Controllers
 				Id = postVM.Id,
 				Content = postVM.Content,
 				Title = postVM.Title,
-				Image = await _fileManager.SaveImage(postVM.Image)
+				Description = postVM.Description,
+				Category = postVM.Category,
+				Tags = postVM.Tags
+
 			};
+
+			if (postVM.Image == null)
+			{
+				post.Image = postVM.CurrentImage;
+			} else
+			{
+				post.Image = await _fileManager.SaveImage(postVM.Image);
+			}
 
 			if (post.Id > 0)
 			{

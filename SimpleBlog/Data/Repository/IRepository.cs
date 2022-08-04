@@ -9,6 +9,7 @@ namespace SimpleBlog.Data.Repository
 	{
 		Post GetPost(int id);
 		List<Post> GetAllPosts();
+		List<Post> GetAllPostsByCategory(string Category);
 		void AddPost(Post post);
 		void RemovePost(int id);
 		void UpdatePost(Post post);

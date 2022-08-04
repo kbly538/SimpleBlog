@@ -1,13 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SimpleBlog.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using SimpleBlog.Data.FileManager;
 using SimpleBlog.Data.Repository;
 using SimpleBlog.Models;
-using SimpleBlog.ViewModels;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SimpleBlog.ControllerS
 {
@@ -20,10 +15,10 @@ namespace SimpleBlog.ControllerS
 			_repository = repository;
 			_fileManager = fileManager;
 		}
-		public IActionResult Index()
+		public IActionResult Index(string category)
 		{
-
-			List<Post> posts = _repository.GetAllPosts();
+			List<Post> posts = string.IsNullOrEmpty(category)
+				? _repository.GetAllPosts() : _repository.GetAllPostsByCategory(category);
 			return View(posts);
 		}
 

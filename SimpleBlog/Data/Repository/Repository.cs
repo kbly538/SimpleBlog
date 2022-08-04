@@ -54,5 +54,13 @@ namespace SimpleBlog.Data.Repository
 
 			return false;
 		}
+
+		public List<Post> GetAllPostsByCategory(string category)
+		{
+			//Func<Post, bool> InCategory = (post) => { return post.Category.ToLower().Equals(category.ToLower()); };
+			return _ctx.Post
+				.Where(post => post.Category.ToLower().Equals(category.ToLower()))
+				.ToList();
+		}
 	}
 }
