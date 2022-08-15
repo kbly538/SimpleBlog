@@ -79,6 +79,12 @@ namespace SimpleBlog.Controllers
 				post.Image = postVM.CurrentImage;
 			} else
 			{
+
+				if (!string.IsNullOrEmpty(postVM.CurrentImage))
+				{
+					_fileManager.RemoveImage(postVM.CurrentImage);
+				}
+
 				post.Image = await _fileManager.SaveImage(postVM.Image);
 			}
 
@@ -102,6 +108,11 @@ namespace SimpleBlog.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Remove(int id)
 		{
+			Post toBeRemovedPost = _repository.GetPost(id);
+			if (!string.IsNullOrEmpty(toBeRemovedPost.Image))
+			{
+				_fileManager.RemoveImage(toBeRemovedPost.Image);
+			}
 			_repository.RemovePost(id);
 			await _repository.SaveChangesAsync();
 			return RedirectToAction("Index");

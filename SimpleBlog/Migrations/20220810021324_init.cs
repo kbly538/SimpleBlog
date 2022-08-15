@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SimpleBlog.Migrations
 {
-    public partial class identity : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,25 @@ namespace SimpleBlog.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Post",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(nullable: true),
+                    Content = table.Column<string>(nullable: true),
+                    Image = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Tags = table.Column<string>(nullable: true),
+                    Category = table.Column<string>(nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Post", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -152,6 +171,48 @@ namespace SimpleBlog.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "MainComment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Message = table.Column<string>(nullable: true),
+                    Created = table.Column<DateTime>(nullable: false),
+                    PostId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MainComment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MainComment_Post_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Post",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubComment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Message = table.Column<string>(nullable: true),
+                    Created = table.Column<DateTime>(nullable: false),
+                    MainCommentId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubComment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubComment_MainComment_MainCommentId",
+                        column: x => x.MainCommentId,
+                        principalTable: "MainComment",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -190,6 +251,16 @@ namespace SimpleBlog.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MainComment_PostId",
+                table: "MainComment",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubComment_MainCommentId",
+                table: "SubComment",
+                column: "MainCommentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -210,10 +281,19 @@ namespace SimpleBlog.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "SubComment");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "MainComment");
+
+            migrationBuilder.DropTable(
+                name: "Post");
         }
     }
 }

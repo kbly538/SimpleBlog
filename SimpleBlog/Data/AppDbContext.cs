@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SimpleBlog.Models;
+using SimpleBlog.Models.Comments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,7 @@ namespace SimpleBlog.Data
 
 
 		public DbSet<Post>	Post {get; set;}
+		public DbSet<MainComment> MainComment { get; set; }
+		public DbSet<SubComment> SubComment { get; set; }
 	}
 }

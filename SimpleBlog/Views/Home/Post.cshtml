@@ -1,26 +1,71 @@
 ﻿@model Post
 
-@{ 
-	ViewBag.Title = Model.Title;
-	ViewBag.Description = Model.Description;
-	if (Model.Tags != null)
-			{
+@{
+    ViewBag.Title = Model.Title;
+    ViewBag.Description = Model.Description;
+    if (Model.Tags != null)
+    {
 
-	ViewBag.Keywords = $"{Model.Tags.Replace(","," ")} {Model.Category}";
-			}
+        ViewBag.Keywords = $"{Model.Tags.Replace(",", " ")} {Model.Category}";
+    }
+    var path_base = Context.Request.PathBase;
 }
 
 <div class="container">
-	<div class="post no-shadow">
+    <div class="post no-shadow">
 
-		@if (!String.IsNullOrEmpty(Model.Image))
-		{
-			var imagePath = $"/image/{Model.Image}";
-			<img src="@imagePath" alt="Post Image" />
-			<span class="title-post">@Model.Title</span>
-		}
-	</div>
-	<div class="post-content">
-	   @Html.Raw(Model.Content)
-	</div>
+        @if (!String.IsNullOrEmpty(Model.Image))
+        {
+            var imagePath = $"{path_base}/image/{Model.Image}";
+            <img src="@imagePath" alt="Post Image" />
+            <span class="title-post">@Model.Title</span>
+        }
+    </div>
+    <div class="post-content">
+        @Html.Raw(Model.Content)
+    </div>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="comment-section">
+
+            @{
+
+                await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = 0 });
+            }
+
+
+            @foreach (var comment in Model.MainComments)
+            {
+                <p>
+                    @comment.Message - @comment.Created
+                    <div>
+                        <a asp-controller="Home" asp-action="RemoveComment" asp-route-comId=@comment.Id asp-route-postId="@Model.Id">Remove</a>
+                    </div>
+                </p>
+                <div>
+                    <h4>Sub Comments</h4>
+                    @{
+
+                        await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = comment.Id });
+                    }
+                    @foreach (var subcomment in comment.SubComments)
+                    {
+                        <h5>Answer to: @comment.Message</h5>
+                        <p>
+                            @subcomment.Message - @subcomment.Created
+                        </p>
+                    }
+                </div>
+            }
+
+        </div>
+    }
+    else
+    {
+        <div>
+            <p><a asp-action="Login" asp-controller="Auth"> Sign in</a> to comment!</p>
+        </div>
+    }
+
 </div>

@@ -1,30 +1,52 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.27" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.27" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.27" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.27">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.27" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.27" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.27" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ImageProcessor" Version="2.9.1" />
+		<PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.27" />
 
-  <ItemGroup>
-    <Folder Include="wwwroot\content\blog\" />
-  </ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.27" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.27">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.27" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.27">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.27" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.27" />
+		<PackageReference Include="PhotoSauce.MagicScaler" Version="0.13.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\lib\Trumbowyg-main\.github\FUNDING.yml" />
-    <None Include="wwwroot\lib\Trumbowyg-main\.github\ISSUE_TEMPLATE.md" />
-  </ItemGroup>
+	<!--<ItemGroup>
+	<Folder Include="wwwroot\content\blog\" />
+  </ItemGroup>-->
+
+	<ItemGroup>
+
+		<Content Update="wwwroot\content\blog\*.*" CopyToPublishDirectory="Never" />
+		<Content Update="wwwroot\lib\**\*.*" CopyToPublishDirectory="Never" />
+		<Content Update="wwwroot\lib\**\dist\**\*.*" CopyToPublishDirectory="Always" />
+
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="wwwroot\lib\Trumbowyg-main\.github\FUNDING.yml" />
+		<None Include="wwwroot\lib\Trumbowyg-main\.github\ISSUE_TEMPLATE.md" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\content\blog\" />
+	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="appsettings" appsettings_1production_1json__JsonSchema="https://json.schemastore.org/appsettings.json" /></VisualStudio></ProjectExtensions>
+
 
 </Project>

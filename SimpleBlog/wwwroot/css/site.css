@@ -6,7 +6,6 @@
 a {
     color: aliceblue;
     text-decoration: none;
-
 }
 
     a:hover {
@@ -18,7 +17,6 @@ nav {
     height: 50px;
     width: 100%;
     text-align: center;
-
 }
 
     nav a {
@@ -29,11 +27,15 @@ nav {
 
 .main-img {
     position: relative;
-    height: 300px;
+    height: 500px;
     background-image: url('../content/static/barley-field-1684052_1920.jpg');
     background-position: center;
     background-size: cover;
-    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
 }
 
 .title {
@@ -52,7 +54,6 @@ nav {
     width: 100%;
     max-width: 800px;
     margin: auto;
-
 }
 
 .post {
@@ -60,7 +61,7 @@ nav {
     position: relative;
     height: 400px;
     display: flex;
-    box-shadow: 0 0 5px 0 black;    
+    box-shadow: 0 0 5px 0 black;
 }
 
     .post img {
@@ -68,16 +69,14 @@ nav {
         object-fit: cover;
     }
 
-    .post-content {
-        margin: -5px 5px 0;
-        background-color: white;
+.post-content {
+    margin: -5px 5px 0;
+    background-color: white;
+}
 
-
-    }
-
-    .no-shadow {
-        box-shadow: none;
-    }
+.no-shadow {
+    box-shadow: none;
+}
 
 .title-post {
     position: absolute;
@@ -88,3 +87,58 @@ nav {
     top: 40%;
     text-shadow: 1px 1px 2px black;
 }
+
+
+.pagenavcontroller {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 2rem;
+    text-align: center;
+    
+}
+
+    .pagenavcontroller a {
+        background-color: #4f5a62;
+        color: white;
+        padding: 1rem;
+        width: 50px;
+        border: 1px solid #eee;
+        margin: 0 0.25rem;
+        text-decoration: none
+    }
+
+        .pagenavcontroller a:hover {
+            background-color: #696969;
+            width: 50px;
+        } 
+
+    .pagenavcontroller .active {
+        background-color: #868686;
+        width: 50px;
+    }
+
+
+.dots {
+    color: white;
+    font-size: 30px;
+    margin: 0 0.25rem;
+    text-decoration: none; 
+    width: 50px;
+}
+
+.sign-in-form {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+
+}
+
+    .sign-in-form div {
+        max-width: 200px;
+        width: 100%;
+        margin-bottom: 1rem;
+    }

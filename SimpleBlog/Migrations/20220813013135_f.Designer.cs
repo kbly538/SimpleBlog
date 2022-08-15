@@ -10,8 +10,8 @@ using SimpleBlog.Data;
 namespace SimpleBlog.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220728200917_identity")]
-    partial class identity
+    [Migration("20220813013135_f")]
+    partial class f
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -217,6 +217,52 @@ namespace SimpleBlog.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("SimpleBlog.Models.Comments.MainComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("MainComment");
+                });
+
+            modelBuilder.Entity("SimpleBlog.Models.Comments.SubComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MainCommentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MainCommentId");
+
+                    b.ToTable("SubComment");
+                });
+
             modelBuilder.Entity("SimpleBlog.Models.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -224,11 +270,23 @@ namespace SimpleBlog.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tags")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -285,6 +343,22 @@ namespace SimpleBlog.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SimpleBlog.Models.Comments.MainComment", b =>
+                {
+                    b.HasOne("SimpleBlog.Models.Post", null)
+                        .WithMany("MainComments")
+                        .HasForeignKey("PostId");
+                });
+
+            modelBuilder.Entity("SimpleBlog.Models.Comments.SubComment", b =>
+                {
+                    b.HasOne("SimpleBlog.Models.Comments.MainComment", null)
+                        .WithMany("SubComments")
+                        .HasForeignKey("MainCommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

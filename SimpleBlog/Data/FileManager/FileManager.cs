@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using PhotoSauce.MagicScaler;
 
 namespace SimpleBlog.Data.FileManager
 {
@@ -31,6 +29,26 @@ namespace SimpleBlog.Data.FileManager
 			return null;
 		}
 
+		public bool RemoveImage(string image)
+		{
+
+			try {
+				var file = Path.Combine(_imagePath, image);
+				if (File.Exists(file))
+				{
+					File.Delete(file);
+				}
+
+				return true;
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				return false;
+			}
+
+		}
+
 		public async Task<string> SaveImage(IFormFile image)
 		{
 			try
@@ -42,12 +60,14 @@ namespace SimpleBlog.Data.FileManager
 				}
 
 				var mime = image.FileName.Substring(image.FileName.LastIndexOf("."));
-				var fileName = $"img_{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}{mime}";
+				var fileName = $"img_{DateTime.Now:dd-MM-yyyy-HH-mm-ss}{mime}";
 
 				using (var fileStream = new FileStream(Path.Combine(savingPath, fileName), FileMode.Create))
 				{
-					await image.CopyToAsync(fileStream);
+					await Task.Run(()=> MagicImageProcessor.ProcessImage(image.OpenReadStream(), fileStream, ImageOptions()));
+
 				}
+
 
 				return fileName;
 			} catch (Exception e)
@@ -56,5 +76,25 @@ namespace SimpleBlog.Data.FileManager
 				return "Error loading the image.";
 			}
 		}
+
+		private ProcessImageSettings ImageOptions()
+		{
+			ProcessImageSettings processImageSettings = new ProcessImageSettings
+			{
+				Width = 801,
+				Height = 500,
+				ResizeMode = CropScaleMode.Crop,
+				EncoderOptions = new JpegEncoderOptions(100, ChromaSubsampleMode.Subsample420, false)
+
+
+			};
+
+			processImageSettings.TrySetEncoderFormat(ImageMimeTypes.Jpeg);
+
+			return processImageSettings;
+
+		}
+
+			
 	}
 }

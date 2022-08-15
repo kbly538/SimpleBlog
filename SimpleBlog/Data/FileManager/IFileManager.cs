@@ -12,5 +12,6 @@ namespace SimpleBlog.Data.FileManager
 	{
 		FileStream ImageStream(string image);
 		Task<String> SaveImage(IFormFile image);
+		bool RemoveImage(string image);
 	}
 }

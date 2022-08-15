@@ -1,22 +1,26 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SimpleBlog.Configuration;
 using SimpleBlog.Data;
 using SimpleBlog.Data.FileManager;
 using SimpleBlog.Data.Repository;
-
-
+using SimpleBlog.Services;
+using SimpleBlog.Services.Email;
+using SimpleBlog.Util;
 
 namespace SimpleBlog
 {
 	public class Startup
 	{
 
-		private IConfiguration _config;
+		private readonly IConfiguration _config;
+		private string _connectionString;
 		public Startup(IConfiguration configuration)
 		{
 			_config = configuration;
@@ -27,7 +31,13 @@ namespace SimpleBlog
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddDbContext<AppDbContext>(options => options.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
+
+			_connectionString = _config.GetConnectionString("DefaultConnection");
+
+			services.Configure<SmtpSettings>(_config.GetSection("SmtpSettings"));
+
+
+			services.AddDbContext<AppDbContext>(options => options.UseSqlServer(_connectionString));
 
 			services.AddIdentity<IdentityUser, IdentityRole>(options =>
 			{
@@ -37,7 +47,7 @@ namespace SimpleBlog
 				options.Password.RequiredLength = 6;
 				options.Password.RequireLowercase = false;
 			}
-				
+
 
 			)
 				//.AddRoles<IdentityRole>()
@@ -47,11 +57,21 @@ namespace SimpleBlog
 			{
 				options.LoginPath = "/Auth/Login";
 			});
-			services.AddMvc(option => option.EnableEndpointRouting = false);
+			//services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
+
 			services.AddTransient<IRepository, Repository>();			
-			services.AddTransient<IFileManager, FileManager>();			
+			services.AddTransient<IFileManager, FileManager>();
+			services.AddSingleton<IEmailService, EmailServiceImpl>();
 
 
+			services.AddMvc(option =>
+			{
+
+				option.EnableEndpointRouting = false;
+				option.CacheProfiles.Add("Monthly",
+					new CacheProfile { Duration = (int) CacheProfileDurations.Monthly});
+			});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,8 +79,9 @@ namespace SimpleBlog
 		{
 			if (env.IsDevelopment())
 			{
-				app.UseDeveloperExceptionPage();
+				
 			}
+			app.UseDeveloperExceptionPage();
 
 			app.UseStaticFiles();
 			app.UseAuthentication();
